@@ -1,8 +1,12 @@
 import { prismaClient } from "../app/database";
 import { ResponseError } from "../error/response-error";
+import { createTodoValidation } from "../validation/todo-validation";
+import { validate } from "../validation/validation";
 
 const create = async (request) => {
-    if (request.title === "") {
+    request = validate(createTodoValidation, request);
+
+    if (!request) {
         throw new ResponseError(401, "Input data");
     }
 
