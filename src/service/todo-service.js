@@ -6,11 +6,11 @@ import { validate } from "../validation/validation";
 const create = async (request) => {
     request = validate(createTodoValidation, request);
 
-    if (!request) {
-        throw new ResponseError(401, "Input data");
-    }
+    // if (request.title === null) {
+    //     throw new ResponseError(401, "Input data");
+    // }
 
-    const result = await prismaClient.todo.create({
+    return prismaClient.todo.create({
         data: request,
         select: {
             id: true,
@@ -18,8 +18,6 @@ const create = async (request) => {
             task: true,
         },
     });
-
-    return result;
 };
 
 export default {

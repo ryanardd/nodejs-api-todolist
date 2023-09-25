@@ -22,8 +22,29 @@ describe("POST /api/todo/", () => {
         });
 
         logger.info(result.body);
-        console.info(result);
 
-        expect(result.status).toBe(401);
+        expect(result.status).toBe(400);
+    });
+
+    it("should reject if request title invalid", async () => {
+        const result = await supertest(app).post("/api/todo/").send({
+            title: "",
+            task: "Belajar",
+        });
+
+        logger.info(result.body);
+
+        expect(result.status).toBe(400);
+    });
+
+    it("should reject if request task invalid", async () => {
+        const result = await supertest(app).post("/api/todo/").send({
+            title: "Belajar",
+            task: "",
+        });
+
+        logger.info(result.body);
+
+        expect(result.status).toBe(400);
     });
 });
