@@ -1,4 +1,4 @@
-import todoService from "../service/todo-service";
+import todoService from "../service/todo-service.js";
 
 const create = async (req, res, next) => {
     try {
@@ -13,6 +13,20 @@ const create = async (req, res, next) => {
     }
 };
 
+const get = async (req, res, next) => {
+    try {
+        const request = req.body;
+        const result = await todoService.get(request);
+        res.status(200).json({
+            data: result,
+            message: "All data",
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 export default {
     create,
+    get,
 };

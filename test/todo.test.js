@@ -48,3 +48,23 @@ describe("POST /api/todo/", () => {
         expect(result.status).toBe(400);
     });
 });
+
+describe("GET /api/todo/", () => {
+    it("should can get all data", async () => {
+        const result = await supertest(app).get("/api/todo/");
+
+        logger.info(result.body);
+
+        expect(result.status).toBe(200);
+    });
+
+    // CEK DATA DAHULU
+
+    // it("should reject get all data", async () => {
+    //     const result = await supertest(app).get("/api/todo/");
+
+    //     logger.info(result.body);
+
+    //     expect(result.status).toBe(200);
+    // });
+});
