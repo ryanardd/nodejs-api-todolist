@@ -1,6 +1,6 @@
 import { prismaClient } from "../app/database.js";
 import { ResponseError } from "../error/response-error.js";
-import { createTodoValidation } from "../validation/todo-validation.js";
+import { createTodoValidation, updateTodoValidation } from "../validation/todo-validation.js";
 import { validate } from "../validation/validation.js";
 
 const create = async (request) => {
@@ -39,7 +39,37 @@ const get = async (request) => {
     });
 };
 
+const update = async (requestId) => {
+    requestId = validate(updateTodoValidation, requestId);
+
+    const countId = await prismaClient.todo.count({
+        where: {
+            id: requestId.id,
+        },
+    });
+
+    if (countId !== 1) {
+        throw new ResponseError(404, "Data is not found");
+    }
+
+    return prismaClient.todo.update({
+        where: {
+            id: requestId.id,
+        },
+        data: {
+            title: requestId.title,
+            task: requestId.task,
+        },
+        select: {
+            id: true,
+            title: true,
+            task: true,
+        },
+    });
+};
+
 export default {
     create,
     get,
+    update,
 };

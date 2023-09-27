@@ -4,3 +4,9 @@ export const createTodoValidation = Joi.object({
     title: Joi.string().min(1).optional(),
     task: Joi.string().min(1).required(),
 });
+
+export const updateTodoValidation = Joi.object({
+    id: Joi.number().positive().required(),
+    title: Joi.string().min(1).optional(),
+    task: Joi.string().min(1).optional(),
+});

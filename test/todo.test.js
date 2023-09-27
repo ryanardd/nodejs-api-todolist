@@ -1,6 +1,7 @@
 import supertest from "supertest";
 import { app } from "../src/app/web";
 import { logger } from "../src/app/logging";
+import { getTest } from "./test-util";
 
 describe("POST /api/todo/", () => {
     it("should can create todolist", async () => {
@@ -67,4 +68,54 @@ describe("GET /api/todo/", () => {
 
     //     expect(result.status).toBe(200);
     // });
+});
+
+describe("PATCH /api/todo/:id", () => {
+    it("should can data updated", async () => {
+        // get data test
+        const testId = await getTest();
+
+        const result = await supertest(app)
+            .patch("/api/todo/" + testId.id)
+            .send({
+                title: "Rahasia",
+                task: "Jangan Dibuka",
+            });
+
+        logger.info(result.body);
+        console.info(result);
+        expect(result.status).toBe(200);
+        expect(result.body.data.title).toBe("Rahasia");
+        expect(result.body.data.task).toBe("Jangan Dibuka");
+    });
+
+    it("should can data title updated", async () => {
+        // get data test
+        const testId = await getTest();
+
+        const result = await supertest(app)
+            .patch("/api/todo/" + testId.id)
+            .send({
+                title: "Rahasia Lagi",
+            });
+
+        logger.info(result.body);
+        expect(result.status).toBe(200);
+        expect(result.body.data.title).toBe("Rahasia Lagi");
+    });
+
+    it("should reject request id", async () => {
+        // get data test
+        const testId = await getTest();
+
+        const result = await supertest(app)
+            .patch("/api/todo/" + (testId.id + 99))
+            .send({
+                title: "Rahasia",
+                task: "Jangan Dibuka",
+            });
+
+        logger.info(result.body);
+        expect(result.status).toBe(404);
+    });
 });
