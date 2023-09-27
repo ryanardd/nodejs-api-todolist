@@ -42,8 +42,21 @@ const update = async (req, res, next) => {
     }
 };
 
+const remove = async (req, res, next) => {
+    try {
+        const requestId = req.params.id;
+        await todoService.remove(requestId);
+        res.status(200).json({
+            message: "Deleted Successfuly",
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 export default {
     create,
     get,
     update,
+    remove,
 };

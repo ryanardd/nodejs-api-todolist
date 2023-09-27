@@ -58,16 +58,6 @@ describe("GET /api/todo/", () => {
 
         expect(result.status).toBe(200);
     });
-
-    // CEK DATA DAHULU
-
-    // it("should reject get all data", async () => {
-    //     const result = await supertest(app).get("/api/todo/");
-
-    //     logger.info(result.body);
-
-    //     expect(result.status).toBe(200);
-    // });
 });
 
 describe("PATCH /api/todo/:id", () => {
@@ -83,7 +73,6 @@ describe("PATCH /api/todo/:id", () => {
             });
 
         logger.info(result.body);
-        console.info(result);
         expect(result.status).toBe(200);
         expect(result.body.data.title).toBe("Rahasia");
         expect(result.body.data.task).toBe("Jangan Dibuka");
@@ -116,6 +105,29 @@ describe("PATCH /api/todo/:id", () => {
             });
 
         logger.info(result.body);
+        expect(result.status).toBe(404);
+    });
+});
+
+describe("DELETE /api/todo/:id", () => {
+    it("should can data deleted", async () => {
+        const testId = await getTest();
+
+        const result = await supertest(app).delete("/api/todo/" + testId.id);
+
+        logger.info(result.body);
+
+        expect(result.status).toBe(200);
+        expect(result.body.message).toBe("Deleted Successfuly");
+    });
+
+    it("should reject if request deleted invalid", async () => {
+        const testId = await getTest();
+
+        const result = await supertest(app).delete("/api/todo/" + (testId.id + 99));
+
+        logger.info(result.body);
+
         expect(result.status).toBe(404);
     });
 });
